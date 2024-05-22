@@ -1,4 +1,4 @@
-package app.cash.quiver.continuations
+package app.cash.quiver.effects
 
 import app.cash.quiver.Absent
 import app.cash.quiver.Failure
@@ -13,12 +13,25 @@ import arrow.core.raise.effect
 import arrow.core.raise.fold
 import arrow.core.right
 
-// TODO(hugom): move this into an effect package, instead of continuations to align with arrow (?)
 @JvmInline
 value class OutcomeEffectScope<E>(private val cont: Raise<Either<Failure<E>, Absent>>) :
   Raise<Either<Failure<E>, Absent>> {
 
   suspend fun <B> Outcome<E, B>.bind(): B =
+    when (this) {
+      Absent -> raise(Absent.right())
+      is Failure -> raise(this.left())
+      is Present -> value
+    }
+
+  override fun raise(r: Either<Failure<E>, Absent>): Nothing = cont.raise(r)
+}
+
+@JvmInline
+value class OutcomeEagerEffectScope<E>(private val cont: Raise<Either<Failure<E>, Absent>>) :
+  Raise<Either<Failure<E>, Absent>> {
+
+  fun <B> Outcome<E, B>.bind(): B =
     when (this) {
       Absent -> raise(Absent.right())
       is Failure -> raise(this.left())
@@ -34,7 +47,7 @@ object outcome {
   @Deprecated(outcomeDSLDeprecation, ReplaceWith("outcome(f)", "app.cash.quiver.raise.outcome"))
   inline fun <E, A> eager(crossinline f: suspend OutcomeEagerEffectScope<E>.() -> A): Outcome<E, A> =
     eagerEffect {
-      f.invoke(OutcomeEffectScope<E>(this))
+      f.invoke(OutcomeEagerEffectScope<E>(this))
     }.fold({ it.merge() }, ::Present)
 
   @Deprecated(outcomeDSLDeprecation, ReplaceWith("outcome(f)", "app.cash.quiver.raise.outcome"))
