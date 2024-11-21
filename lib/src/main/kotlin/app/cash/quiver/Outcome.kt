@@ -3,6 +3,10 @@
 package app.cash.quiver
 
 import app.cash.quiver.extensions.OutcomeOf
+import app.cash.quiver.extensions.orThrow
+import app.cash.quiver.extensions.toResult
+import app.cash.quiver.raise.OutcomeRaise
+import app.cash.quiver.raise.outcome
 import arrow.core.Either
 import arrow.core.Either.Left
 import arrow.core.Either.Right
@@ -14,14 +18,10 @@ import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.identity
 import arrow.core.left
+import arrow.core.raise.catch
 import arrow.core.right
 import arrow.core.some
 import arrow.core.valid
-import app.cash.quiver.extensions.orThrow
-import app.cash.quiver.extensions.toResult
-import app.cash.quiver.raise.OutcomeRaise
-import app.cash.quiver.raise.outcome
-import arrow.core.raise.catch
 import kotlin.experimental.ExperimentalTypeInference
 
 /**
@@ -246,6 +246,18 @@ inline fun <E, A> Outcome<E, A>.asEither(onAbsent: () -> E): Either<E, A> =
  * Outcome.
  */
 fun <A> OutcomeOf<A>.asResult(): Result<Option<A>> = inner.toResult()
+
+/**
+ * Converts an OutcomeOf<A> to a Result<A>, converting Absent to a Failure.
+ */
+inline fun <A> OutcomeOf<A>.asResult(onAbsent: () -> Throwable): Result<A> =
+  inner.toResult()
+    .flatMap { maybeValue ->
+      maybeValue.fold(
+        { Result.failure(onAbsent()) },
+        { Result.success(it) }
+      )
+    }
 
 inline fun <E, A, B> Outcome<E, A>.foldOption(onAbsent: () -> B, onPresent: (A) -> B): Either<E, B> =
   inner.map { it.fold(onAbsent, onPresent) }

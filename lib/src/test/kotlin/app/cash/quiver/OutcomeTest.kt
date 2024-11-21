@@ -31,6 +31,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
@@ -40,6 +41,7 @@ import io.kotest.property.arrow.core.either
 import io.kotest.property.arrow.core.option
 import io.kotest.property.checkAll
 import kotlinx.coroutines.coroutineScope
+import java.lang.IllegalStateException
 
 class OutcomeTest : StringSpec({
   "Present flatMap" {
@@ -475,6 +477,7 @@ class OutcomeTest : StringSpec({
       absent.recover { fallback.bind() }.shouldBeAbsent()
     }
   }
+
   "recover can recover from Failure" {
     checkAll(Arb.either(Arb.long(), Arb.int())) { either ->
       val failed: Outcome<String, Int> = "failure".failure()
@@ -495,9 +498,16 @@ class OutcomeTest : StringSpec({
     }
   }
 
-  "Converting to Result" {
+  "converting to Result" {
     Absent.asResult() shouldBe Result.success(None)
     1.present().asResult() shouldBe Result.success(Some(1))
     Throwable("sad").failure().asResult().shouldBeFailure().message shouldBe "sad"
   }
+
+  "asResult converts to Either converting Absent to an error" {
+    1.present().asResult { IllegalStateException("nup") }.shouldBeSuccess(1)
+    Absent.asEither { IllegalStateException("nup") }.shouldBeLeft().message shouldBe "nup"
+    "bad".failure().asEither { IllegalStateException("nup") }.shouldBeLeft("bad")
+  }
+
 })
