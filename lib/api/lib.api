@@ -119,6 +119,10 @@ public final class app/cash/quiver/continuations/OutcomeEagerEffectScope : arrow
 	public final synthetic fun unbox-impl ()Larrow/core/continuations/EagerEffectScope;
 }
 
+public final class app/cash/quiver/continuations/OutcomeEagerEffectScopeKt {
+	public static final field outcomeDSLDeprecation Ljava/lang/String;
+}
+
 public final class app/cash/quiver/continuations/OutcomeEffectScope : arrow/core/continuations/EffectScope {
 	public fun attempt (Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun attempt-impl (Larrow/core/continuations/EffectScope;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
