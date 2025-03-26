@@ -1,21 +1,17 @@
 package app.cash.quiver.extensions
 
 import arrow.core.Either
-import arrow.core.NonEmptyList
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.left
 import arrow.core.right
 import arrow.core.some
-import arrow.core.toNonEmptyListOrNull
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.filter
 import io.kotest.property.arbitrary.int
-import io.kotest.property.arbitrary.list
 import io.kotest.property.arbitrary.map
-import io.kotest.property.arrow.core.nonEmptyList
+import io.kotest.property.arrow.core.nel
 import io.kotest.property.checkAll
 import app.cash.quiver.extensions.traverse as quiverTraverse
 
@@ -132,7 +128,7 @@ class MapTest : StringSpec({
   }
 
   "traverse Option short-circuits" {
-    checkAll(arbNel(Arb.int())) { ints ->
+    checkAll(Arb.nel(Arb.int())) { ints ->
       val acc = mutableListOf<Int>()
       val evens = ints.quiverTraverse {
         if (it % 2 == 0) {
@@ -146,12 +142,4 @@ class MapTest : StringSpec({
       evens.fold({ Unit }) { it shouldBe ints }
     }
   }
-}) {
-  companion object {
-    // TODO(hugom): remove in favour of Arb.nonEmptyList once kotest-extensions-arrow has been upgraded to arrow 2.0.0
-    private fun <A> arbNel(a: Arb<A>): Arb<NonEmptyList<A>> =
-      Arb.list(a).filter(List<A>::isNotEmpty).map {
-        it.toNonEmptyListOrNull() ?: throw IndexOutOfBoundsException("Empty list")
-      }
-  }
-}
+})
