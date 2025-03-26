@@ -1,26 +1,21 @@
 package app.cash.quiver.extensions
 
-import app.cash.quiver.extensions.traverse
 import arrow.core.Either
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.right
 import arrow.core.some
+import io.kotest.assertions.arrow.core.shouldBeLeft
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arrow.core.option
 import io.kotest.property.checkAll
 import app.cash.quiver.extensions.traverse as quiverTraverse
 import app.cash.quiver.extensions.traverseEither as quiverTraverseEither
-import app.cash.quiver.extensions.ifPresent
-import arrow.core.NonEmptyList
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.assertions.arrow.core.shouldHaveSize
-import io.kotest.matchers.shouldHave
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 class OptionTest : StringSpec({
 
