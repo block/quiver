@@ -1,20 +1,21 @@
 package app.cash.quiver.extensions
 
-import app.cash.quiver.extensions.traverse
 import arrow.core.Either
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.right
 import arrow.core.some
+import io.kotest.assertions.arrow.core.shouldBeLeft
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arrow.core.option
 import io.kotest.property.checkAll
 import app.cash.quiver.extensions.traverse as quiverTraverse
 import app.cash.quiver.extensions.traverseEither as quiverTraverseEither
-import app.cash.quiver.extensions.ifPresent
 
 class OptionTest : StringSpec({
 
@@ -77,6 +78,13 @@ class OptionTest : StringSpec({
 
     None.ifPresent { sideEffectRun = true } shouldBe Unit
     sideEffectRun shouldBe false
+  }
+
+  "toValidatedNel converts an option to a ValidatedNel" {
+    val errorList = None.toValidatedNel { IllegalStateException("Empty!") }.shouldBeLeft()
+    errorList.first().shouldBeInstanceOf<IllegalStateException>()
+
+    Some(42).toValidatedNel { IllegalStateException("Invalid") }.shouldBeRight(42)
   }
 
   @Suppress("UNREACHABLE_CODE")

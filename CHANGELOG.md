@@ -1,6 +1,10 @@
 # Change Log
 
 ## Unreleased
+* Upgrades Arrow to 2.x (Hugo Müller-Downing)
+* Removes `OutcomeEffectScope` and `OutcomeEagerEffectScope` in favour of `OutcomeBuilder` (Hugo Müller-Downing)
+* Removes methods interacting with `Validated`, as `Validated` is now deprecated (Hugo Müller-Downing)
+* Replaces `ValidatedNel` with a typealias of `Either<NonEmptyList<E>, A>` (Hugo Müller-Downing)
 
 ## [0.5.12]
 * Adds `<A, B> Iterable<A>.traverse(f: (A) -> Result<B>): Result<List<B>>` (Chris Myers)

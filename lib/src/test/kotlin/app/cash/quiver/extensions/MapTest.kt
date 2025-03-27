@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.left
-import arrow.core.maybe
 import arrow.core.right
 import arrow.core.some
 import io.kotest.core.spec.style.StringSpec
@@ -12,7 +11,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.map
-import io.kotest.property.arrow.core.nonEmptyList
+import io.kotest.property.arrow.core.nel
 import io.kotest.property.checkAll
 import app.cash.quiver.extensions.traverse as quiverTraverse
 
@@ -129,7 +128,7 @@ class MapTest : StringSpec({
   }
 
   "traverse Option short-circuits" {
-    checkAll(Arb.nonEmptyList(Arb.int())) { ints ->
+    checkAll(Arb.nel(Arb.int())) { ints ->
       val acc = mutableListOf<Int>()
       val evens = ints.quiverTraverse {
         if (it % 2 == 0) {
