@@ -20,13 +20,17 @@ jobs:
       - name: Build html
         run: bin/gradle dokkaHtml --no-daemon --stacktrace
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: lib/build/dokka/html
   # Publish job
   publish-documentation:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     needs: build-documentation
     runs-on: ubuntu-latest
     steps:
       - name: Deploy GitHub Pages site
-        uses: actions/deploy-pages@v3
+        id: deployment
+        uses: actions/deploy-pages@v4
