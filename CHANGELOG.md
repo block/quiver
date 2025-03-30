@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+
+## [1.0.0]
 * Upgrades Arrow to 2.x (Hugo Müller-Downing)
 * Removes `OutcomeEffectScope` and `OutcomeEagerEffectScope` in favour of `OutcomeBuilder` (Hugo Müller-Downing)
 * Removes methods interacting with `Validated`, as `Validated` is now deprecated (Hugo Müller-Downing)
