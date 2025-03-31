@@ -34,7 +34,7 @@ gradle build
 
 ## Documentation
 
-The API documentation is published with each release at [https://cashapp.github.io/quiver](https://cashapp.github.io/quiver)
+The API documentation is published with each release at https://block.github.io/quiver/.
 
 ## Changelog
 
