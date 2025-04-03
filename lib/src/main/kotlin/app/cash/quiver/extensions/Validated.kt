@@ -87,3 +87,17 @@ inline fun <ERR, A, B> A.validateMap(
  */
 inline fun <ERR, A, B> ValidatedNel<ERR, A>.concatMap(f: (A) -> ValidatedNel<ERR, B>): ValidatedNel<ERR, B> =
   this.flatMap { f(it) }
+
+/**
+ * An extension method for constructing a valid ValidatedNel.
+ */
+fun <A> A.validNel(): ValidatedNel<Nothing, A> =
+  this.right()
+
+
+/**
+ * An extension method for constructing an invalid ValidatedNel.
+ */
+fun <E> E.invalidNel(): ValidatedNel<E, Nothing> =
+  nonEmptyListOf(this).left()
+

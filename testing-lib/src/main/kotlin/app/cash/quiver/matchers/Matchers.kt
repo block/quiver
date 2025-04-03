@@ -4,6 +4,9 @@ import app.cash.quiver.Absent
 import app.cash.quiver.Failure
 import app.cash.quiver.Outcome
 import app.cash.quiver.Present
+import app.cash.quiver.extensions.ValidatedNel
+import arrow.core.Either
+import arrow.core.NonEmptyList
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -40,5 +43,28 @@ fun <A, B> Outcome<A, B>.shouldBeFailure(): A {
     Absent -> throw AssertionError("Expected Outcome.Failure but got Absent")
     is Failure -> error
     is Present -> throw AssertionError("Expected Outcome.Failure but got Present($value)")
+  }
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun <E, reified A> ValidatedNel<E, A>.shouldBeValid(): A {
+  contract {
+    returns() implies (this@shouldBeValid is A)
+  }
+
+  return when(this) {
+    is Either.Left -> throw AssertionError("Expected Right (Valid), but found $this")
+    is Either.Right -> value
+  }
+}
+@OptIn(ExperimentalContracts::class)
+fun <E, A> ValidatedNel<E, A>.shouldBeInvalid(): Set<E> {
+  contract {
+    returns() implies (this@shouldBeInvalid is Set<*>)
+  }
+
+  return when(this) {
+    is Either.Left -> value.toSet()
+    is Either.Right -> throw AssertionError("Expected Left (Invalid), but found $this")
   }
 }
