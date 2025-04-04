@@ -234,8 +234,10 @@ public final class app/cash/quiver/extensions/SuspendedFunctionKt {
 public final class app/cash/quiver/extensions/ValidatedKt {
 	public static final fun attemptValidated (Larrow/core/Either;)Larrow/core/Either;
 	public static final fun concatMap (Larrow/core/Either;Lkotlin/jvm/functions/Function1;)Larrow/core/Either;
+	public static final fun invalidNel (Ljava/lang/Object;)Larrow/core/Either;
 	public static final fun takeLeft (Larrow/core/Either;Larrow/core/Either;)Larrow/core/Either;
 	public static final fun takeRight (Larrow/core/Either;Larrow/core/Either;)Larrow/core/Either;
+	public static final fun validNel (Ljava/lang/Object;)Larrow/core/Either;
 	public static final fun validate (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Larrow/core/Either;
 	public static final fun validateEither (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Larrow/core/Either;
 	public static final fun validateMap (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)Larrow/core/Either;
