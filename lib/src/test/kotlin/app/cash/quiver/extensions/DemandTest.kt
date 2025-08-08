@@ -1,6 +1,6 @@
 package app.cash.quiver.extensions;
 
-import FieldIsNull
+import ValueIsNull
 import arrow.core.None
 import arrow.core.Some
 import demand
@@ -20,10 +20,10 @@ class DemandTest : StringSpec({
 
   "demand is Failure when value is null" {
     val foo: String? = null
-    foo.demand("label").shouldBeFailure<FieldIsNull>()
+    foo.demand("label").shouldBeFailure<ValueIsNull>()
   }
 
   "demand is Failure when value is None" {
-    None.demand("label").shouldBeFailure<FieldIsNull>()
+    None.demand("label").shouldBeFailure<ValueIsNull>()
   }
 })

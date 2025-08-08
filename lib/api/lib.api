@@ -3,11 +3,11 @@ public final class DemandKt {
 	public static final fun demand (Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
 }
 
-public final class FieldIsNull : java/lang/Throwable {
+public final class ValueIsNull : java/lang/Throwable {
 	public fun <init> (Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)LFieldIsNull;
-	public static synthetic fun copy$default (LFieldIsNull;Ljava/lang/String;ILjava/lang/Object;)LFieldIsNull;
+	public final fun copy (Ljava/lang/String;)LValueIsNull;
+	public static synthetic fun copy$default (LValueIsNull;Ljava/lang/String;ILjava/lang/Object;)LValueIsNull;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
