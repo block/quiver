@@ -1,3 +1,19 @@
+public final class DemandKt {
+	public static final fun demand (Larrow/core/Option;Ljava/lang/String;)Ljava/lang/Object;
+	public static final fun demand (Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
+}
+
+public final class FieldIsNull : java/lang/Throwable {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)LFieldIsNull;
+	public static synthetic fun copy$default (LFieldIsNull;Ljava/lang/String;ILjava/lang/Object;)LFieldIsNull;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class app/cash/quiver/Absent : app/cash/quiver/Outcome {
 	public static final field INSTANCE Lapp/cash/quiver/Absent;
 	public fun equals (Ljava/lang/Object;)Z
