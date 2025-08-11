@@ -85,6 +85,5 @@ tasks.register("publishToMavenCentral") {
   group = "publishing"
   dependsOn(
     ":lib:publishToMavenCentral",
-    ":testing-lib:publishToMavenCentral",
   )
 }

@@ -5,7 +5,7 @@ import java.net.URL
 plugins {
   id("java-library")
   id("org.jetbrains.kotlin.jvm")
-  id("com.vanniktech.maven.publish") version "0.33.0"
+  id("com.vanniktech.maven.publish")
   alias(libs.plugins.dokka)
 }
 
