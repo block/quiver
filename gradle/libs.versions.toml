@@ -7,7 +7,7 @@ kotestArrow = "2.0.0"
 # @pin
 kotlin = "2.1.20"
 kotlinBinaryCompatibilityPlugin = "0.17.0"
-mavenPublishGradlePlugin = "0.27.0"
+mavenPublish = "0.33.0"
 versionCatalogUpdateGradlePlugin = "0.8.3"
 versionsGradlePlugin = "0.50.0"
 
@@ -22,6 +22,7 @@ kotestFrameworkApi = { module = "io.kotest:kotest-framework-api", version.ref = 
 kotestJunitRunnerJvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
 kotestProperty = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotestPropertyArrow = { module = "io.kotest.extensions:kotest-property-arrow", version.ref = "kotestArrow" }
+mavenPublishGradlePlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 
 [bundles]
 kotest = [
@@ -38,6 +39,6 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 dokkaBase = { id = "org.jetbrains.dokka:dokka-base", version.ref = "dokka" }
 kotlinBinaryCompatibilityPlugin = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinBinaryCompatibilityPlugin" }
 kotlinGradlePlugin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-mavenPublishGradlePlugin = { id = "com.vanniktech.maven.publish.base", version.ref = "mavenPublishGradlePlugin" }
+mavenPublish = { id = "com.vanniktech.maven.publish.base", version.ref = "mavenPublish" }
 versionCatalogUpdateGradlePlugin = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdateGradlePlugin" }
 versionsGradlePlugin = { id = "com.github.ben-manes.versions", version.ref = "versionsGradlePlugin" }
