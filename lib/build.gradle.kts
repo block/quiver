@@ -19,6 +19,13 @@ buildscript {
   }
 }
 
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+  withSourcesJar()
+}
+
 mavenPublishing {
   configure(com.vanniktech.maven.publish.KotlinJvm())
 }
