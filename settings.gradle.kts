@@ -1,13 +1,9 @@
 rootProject.name = "quiver"
 
-plugins {
-  `gradle-enterprise`
-}
-
-gradleEnterprise {
-  buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
   }
 }
 

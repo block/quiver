@@ -1,11 +1,28 @@
 plugins {
-  `java-library`
+  id("java-library")
+  id("org.jetbrains.kotlin.jvm")
+  id("com.vanniktech.maven.publish") version "0.33.0"
+}
+
+repositories {
+  mavenCentral()
 }
 
 sourceSets {
   val test by getting {
     java.srcDir("src/test/kotlin/")
   }
+}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+  withSourcesJar()
+}
+
+mavenPublishing {
+  configure(com.vanniktech.maven.publish.KotlinJvm())
 }
 
 dependencies {
