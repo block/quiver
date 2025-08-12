@@ -46,20 +46,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SECRET_PASSPHRASE }}
           ORG_GRADLE_PROJECT_VERSION_NAME: ${{ steps.version.outputs.version }}
         run: bin/gradle publishToMavenCentral
-
-      - name: Build HTML
-        if: steps.check-branch.outputs.tag_on_main == 'true'
-        run: bin/gradle dokkaHtmlMultiModule --no-daemon --stacktrace
-
-      - name: Upload HTML
-        if: steps.check-branch.outputs.tag_on_main == 'true'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/dokka/html
-          name: 'github-pages'
-
-      - name: Deploy GitHub Pages site
-        if: steps.check-branch.outputs.tag_on_main == 'true'
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: github-pages
