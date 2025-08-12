@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.0.2]
+* Moves demand extension function to extensions package (Hugo Müller-Downing)
+
+## [1.0.1]
+* Adds demand extension function (Hugo Müller-Downing)
+
 ## [1.0.0]
 * Upgrades Arrow to 2.x (Hugo Müller-Downing)
 * Removes `OutcomeEffectScope` and `OutcomeEagerEffectScope` in favour of `OutcomeBuilder` (Hugo Müller-Downing)
