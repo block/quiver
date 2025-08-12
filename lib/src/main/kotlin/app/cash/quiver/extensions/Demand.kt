@@ -1,4 +1,5 @@
-import app.cash.quiver.extensions.toResult
+package app.cash.quiver.extensions
+
 import arrow.core.Option
 
 /**

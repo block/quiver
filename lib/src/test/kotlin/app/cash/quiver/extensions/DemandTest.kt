@@ -1,9 +1,7 @@
 package app.cash.quiver.extensions;
 
-import ValueIsNull
 import arrow.core.None
 import arrow.core.Some
-import demand
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
