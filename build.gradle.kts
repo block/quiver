@@ -8,6 +8,7 @@ plugins {
   alias(libs.plugins.versionsGradlePlugin)
   alias(libs.plugins.versionCatalogUpdateGradlePlugin)
   alias(libs.plugins.dokka)
+  id("com.vanniktech.maven.publish") apply false
 }
 
 repositories {
@@ -84,5 +85,6 @@ tasks.register("publishToMavenCentral") {
   group = "publishing"
   dependsOn(
     ":lib:publishToMavenCentral",
+    ":testing-lib:publishToMavenCentral",
   )
 }
