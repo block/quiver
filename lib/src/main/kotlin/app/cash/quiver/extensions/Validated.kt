@@ -39,6 +39,17 @@ inline fun <ERR, A> A.validateEither(predicate: (A) -> Boolean, error: (A) -> ER
   if (predicate(this)) this.right() else error(this).left()
 
 /**
+ * Given a predicate and an error generating function return either the original value in a Success if the
+ * predicate evaluates as true or the error as a Failure.
+ *
+ * eg:
+ * "hi mum".validate({it.contains("hi")},{"where's your manners?"})
+ *
+ */
+inline fun <A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A> =
+  if (predicate(this)) this.success() else error(this).failure()
+
+/**
  * Often you have two validations that return the same thing, and you don't want necessarily
  * to pair them. takeLeft will return the value of the left side iff both validations
  * succeed.
