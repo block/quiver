@@ -3,11 +3,13 @@ package app.cash.quiver.extensions
 import app.cash.quiver.matchers.shouldBeAbsent
 import app.cash.quiver.matchers.shouldBeFailure
 import app.cash.quiver.matchers.shouldBePresent
+import arrow.core.Either
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.raise.result
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.result.shouldBeFailure
@@ -145,4 +147,14 @@ class ResultTest : StringSpec({
     Result.success(None).toOutcomeOf().shouldBeAbsent()
   }
 
+  "asOption will return an option of the success" {
+    Result.success("zero").asOption() shouldBeSome "zero"
+    Result.failure<Any>(Throwable()).asOption() shouldBe None
+  }
+
+  "failureAsOption will return an option of the failure" {
+    Result.success("zero").failureAsOption() shouldBe None
+    val t = Throwable("boom")
+    Result.failure<Any>(t).failureAsOption() shouldBeSome t
+  }
 })

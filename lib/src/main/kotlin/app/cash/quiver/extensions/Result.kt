@@ -6,7 +6,9 @@ import app.cash.quiver.Present
 import app.cash.quiver.asOutcome
 import app.cash.quiver.toOutcome
 import arrow.core.Either
+import arrow.core.None
 import arrow.core.Option
+import arrow.core.Some
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.identity
@@ -50,6 +52,16 @@ inline fun <A : Throwable, B> B?.toResult(error: () -> A): Result<B> =
  */
 
 inline fun <A, B: Throwable> Option<A>.toResult(error: () -> B): Result<A> = this.getOrNull().toResult(error)
+
+/**
+ * Turns a [Result] into an [Option].
+ */
+fun <A> Result<A>.asOption(): Option<A> = this.map { Some(it) }.getOrElse { None }
+
+/**
+ * Turns the Failure side of a [Result] into an [Option].
+ */
+fun <A> Result<A>.failureAsOption(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
 
 /**
  * If a [Result] is a failure, maps the underlying [Throwable] to a new [Throwable].
