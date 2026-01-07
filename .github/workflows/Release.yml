@@ -1,9 +1,17 @@
 name: Publish a release
 
-on: workflow_dispatch
+on:
+  push:
+    tags:
+      - 'v*'
 
 env:
   TERM: dumb
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   publish:
@@ -11,16 +19,30 @@ jobs:
 
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set gradle publish version
+      - name: Check if tag is on main branch
+        id: check-branch
         run: |
-          sed --in-place -e "s/-SNAPSHOT/-$(date +%Y%m%d.%H%M)-$(git rev-parse --short HEAD)/" gradle.properties
-          cat gradle.properties
+          if git branch -r --contains ${{ github.ref }} | grep -q "origin/main"; then
+            echo "tag_on_main=true" >> $GITHUB_OUTPUT
+          else
+            echo "tag_on_main=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Publish the artifacts
+      - name: Extract version from tag
+        if: steps.check-branch.outputs.tag_on_main == 'true'
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Publish to Maven Central
+        if: steps.check-branch.outputs.tag_on_main == 'true'
         env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ARTIFACT_SIGNING_PRIVATE_KEY }}
-        run: bin/gradle clean build publishAllPublicationsToMavenCentralRepository --no-daemon
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SECRET_PASSPHRASE }}
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ steps.version.outputs.version }}
+        run: bin/gradle publishToMavenCentral

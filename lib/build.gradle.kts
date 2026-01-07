@@ -3,13 +3,31 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URL
 
 plugins {
-  `java-library`
+  id("java-library")
+  id("org.jetbrains.kotlin.jvm")
+  alias(libs.plugins.dokka)
+  id("com.vanniktech.maven.publish")
+}
+
+repositories {
+  mavenCentral()
 }
 
 buildscript {
   dependencies {
     classpath(libs.plugins.dokkaBase.get().toString())
   }
+}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+  withSourcesJar()
+}
+
+mavenPublishing {
+  configure(com.vanniktech.maven.publish.KotlinJvm())
 }
 
 dependencies {

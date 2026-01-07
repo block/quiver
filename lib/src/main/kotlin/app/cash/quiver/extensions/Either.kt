@@ -8,8 +8,12 @@ import arrow.core.Some
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.identity
+import arrow.core.recover
 import arrow.core.right
 import arrow.core.toOption
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.experimental.ExperimentalTypeInference
 import app.cash.quiver.extensions.traverse as quiverTraverse
 
@@ -279,4 +283,20 @@ inline fun <E, A, B> Either<E, A>.traverse(transform: (value: A) -> Option<B>): 
     is Either.Right -> transform(value).map { it.right() }
   }
 
+/**
+ * Synonym for traverse((A)-> Option<B>): Option<Either<E, B>>
+ */
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+inline fun <E, A, B> Either<E, A>.traverseOption(transform: (A) -> Option<B>): Option<Either<E, B>> =
+  quiverTraverse(transform)
+
 fun <E, A> Either<E, Option<A>>.sequence(): Option<Either<E, A>> = quiverTraverse(::identity)
+
+/**
+ * Recovers the left side of an Either with the supplied function
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <A, B, C> Either<A, B>.handleErrorWith(f: (A) -> Either<C, B>): Either<C, B> {
+  contract { callsInPlace(f, InvocationKind.AT_MOST_ONCE) }
+  return recover { a -> f(a).bind() }
+}

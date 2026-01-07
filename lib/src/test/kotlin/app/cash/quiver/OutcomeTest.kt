@@ -1,32 +1,30 @@
-@file:Suppress("DEPRECATION")
-
 package app.cash.quiver
 
 import app.cash.quiver.arb.outcome
+import app.cash.quiver.arb.outcomeOf
+import app.cash.quiver.arb.result
+import app.cash.quiver.extensions.toOutcomeOf
 import app.cash.quiver.matchers.shouldBeAbsent
 import app.cash.quiver.matchers.shouldBeFailure
 import app.cash.quiver.matchers.shouldBePresent
+import app.cash.quiver.raise.outcome
 import arrow.core.Either
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import arrow.core.Validated
-import arrow.core.invalid
 import arrow.core.left
 import arrow.core.right
 import arrow.core.some
-import arrow.core.valid
-import app.cash.quiver.continuations.outcome
-import io.kotest.assertions.arrow.core.shouldBeInvalid
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
-import io.kotest.assertions.arrow.core.shouldBeValid
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
@@ -36,6 +34,7 @@ import io.kotest.property.arrow.core.either
 import io.kotest.property.arrow.core.option
 import io.kotest.property.checkAll
 import kotlinx.coroutines.coroutineScope
+import java.lang.IllegalStateException
 
 class OutcomeTest : StringSpec({
   "Present flatMap" {
@@ -78,7 +77,7 @@ class OutcomeTest : StringSpec({
   }
 
   "bind over present" {
-    outcome.eager {
+    outcome {
       val a = Present("1").bind()
       a
     }.shouldBePresent().shouldBe("1")
@@ -188,6 +187,12 @@ class OutcomeTest : StringSpec({
     Outcome.catchOption {
       None
     }.shouldBeAbsent()
+  }
+
+  "Lift Result<A> into Outcome" {
+    val e = RuntimeException("hey")
+    Result.success(1).toOutcome().shouldBePresent().shouldBe(1)
+    Result.failure<Int>(e).toOutcome().shouldBeFailure().shouldBe(e)
   }
 
   "Lift Either<E,A> into Outcome" {
@@ -354,19 +359,6 @@ class OutcomeTest : StringSpec({
     absent.sequence().shouldBeSome().shouldBeAbsent()
   }
 
-  "Validated sequence/traverse" {
-    Present(1.valid()).sequence().shouldBeValid().shouldBePresent().shouldBe(1)
-    Present(1.valid()).sequence() shouldBe Present(1).traverse { a: Int -> a.valid() }
-
-    val bad: Outcome<String, Validated<String, Int>> = "bad".failure()
-    bad.sequence().shouldBeValid().shouldBeFailure().shouldBe("bad")
-
-    val absent: Outcome<String, Validated<String, Int>> = Absent
-    absent.sequence().shouldBeValid().shouldBeAbsent()
-
-    Present("bad".invalid()).sequence().shouldBeInvalid()
-  }
-
   "List sequence/traverse" {
     Present(listOf(1, 2, 3)).sequence().shouldBe(listOf(1.present(), 2.present(), 3.present()))
     Present(listOf(1, 1)).sequence() shouldBe Present(1).traverse { a: Int -> listOf(a, a) }
@@ -465,11 +457,37 @@ class OutcomeTest : StringSpec({
       absent.recover { fallback.bind() }.shouldBeAbsent()
     }
   }
+
   "recover can recover from Failure" {
     checkAll(Arb.either(Arb.long(), Arb.int())) { either ->
-      val x: Outcome<String, Int> = "failure".failure()
-      x.recover { either.bind() }
+      val failed: Outcome<String, Int> = "failure".failure()
+      failed.recover { either.bind() }
         .asEither { fail("Cannot be absent") }.shouldBe(either)
     }
   }
+
+  "can transform from result to OutcomeOf and back again" {
+    checkAll(Arb.result(Throwable("boom"), Arb.option(Arb.int()))) { input ->
+      input.toOutcomeOf().asResult() shouldBe input
+    }
+  }
+
+  "can transform from OutcomeOf to result and back again" {
+    checkAll(Arb.outcomeOf(Throwable("boom"), Arb.int())) { outcome ->
+      outcome.asResult().toOutcomeOf() shouldBe outcome
+    }
+  }
+
+  "converting to Result" {
+    Absent.asResult() shouldBe Result.success(None)
+    1.present().asResult() shouldBe Result.success(Some(1))
+    Throwable("sad").failure().asResult().shouldBeFailure().message shouldBe "sad"
+  }
+
+  "asResult converts to Either converting Absent to an error" {
+    1.present().asResult { IllegalStateException("nup") }.shouldBeSuccess(1)
+    Absent.asEither { IllegalStateException("nup") }.shouldBeLeft().message shouldBe "nup"
+    "bad".failure().asEither { IllegalStateException("nup") }.shouldBeLeft("bad")
+  }
+
 })
