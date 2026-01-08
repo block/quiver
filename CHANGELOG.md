@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+
+## [1.0.3]
 * Adds `<A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A>` (Andrew Parker)
 * Adds `<A> Result<A>.getOrNone(): Option<A>` (Andrew Parker)
 * Adds `<A> Result<A>.getFailureOrNone(): Option<T>` (Andrew Parker)
