@@ -8,6 +8,7 @@ import arrow.core.Some
 import arrow.core.raise.result
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.result.shouldBeFailure
@@ -145,4 +146,14 @@ class ResultTest : StringSpec({
     Result.success(None).toOutcomeOf().shouldBeAbsent()
   }
 
+  "Converting success to Option" {
+    Result.success("zero").getOrNone() shouldBeSome "zero"
+    Result.failure<Any>(Throwable()).getOrNone() shouldBe None
+  }
+
+  "Converting failure to Option" {
+    Result.success("zero").getFailureOrNone() shouldBe None
+    val t = Throwable("boom")
+    Result.failure<Any>(t).getFailureOrNone() shouldBeSome t
+  }
 })
