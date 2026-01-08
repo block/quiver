@@ -32,11 +32,22 @@ inline fun <ERR, A> A.validate(predicate: (A) -> Boolean, error: (A) -> ERR): Va
  * predicate evaluates as true or the error as a Left.
  *
  * eg:
- * "hi mum".validate({it.contains("hi")},{"where's your manners?"})
+ * "hi mum".validateEither({it.contains("hi")},{"where's your manners?"})
  *
  */
 inline fun <ERR, A> A.validateEither(predicate: (A) -> Boolean, error: (A) -> ERR): Either<ERR, A> =
   if (predicate(this)) this.right() else error(this).left()
+
+/**
+ * Given a predicate and an error generating function return either the original value in a Success if the
+ * predicate evaluates as true or the error as a Failure.
+ *
+ * eg:
+ * "hi mum".validateResult({it.contains("hi")},{ Exception("where's your manners?") })
+ *
+ */
+inline fun <A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A> =
+  if (predicate(this)) this.success() else error(this).failure()
 
 /**
  * Often you have two validations that return the same thing, and you don't want necessarily
