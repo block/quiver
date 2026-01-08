@@ -23,7 +23,8 @@ buildscript {
 }
 
 subprojects {
-  apply(plugin = "org.jetbrains.dokka")
+  apply(plugin = rootProject.libs.plugins.dokka.get().pluginId)
+  apply(plugin = rootProject.libs.plugins.kotlinBinaryCompatibilityPlugin.get().pluginId)
 
   tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
