@@ -1,17 +1,13 @@
 package app.cash.quiver.extensions
 
-import app.cash.quiver.Failure
-import app.cash.quiver.Outcome
-import app.cash.quiver.Present
 import app.cash.quiver.asOutcome
 import app.cash.quiver.toOutcome
 import arrow.core.Either
+import arrow.core.None
 import arrow.core.Option
+import arrow.core.Some
 import arrow.core.flatMap
-import arrow.core.getOrElse
 import arrow.core.identity
-import arrow.core.left
-import arrow.core.right
 
 /**
  * Transforms a `Result<T>` into an `ErrorOr<T>`
@@ -50,6 +46,20 @@ inline fun <A : Throwable, B> B?.toResult(error: () -> A): Result<B> =
  */
 
 inline fun <A, B: Throwable> Option<A>.toResult(error: () -> B): Result<A> = this.getOrNull().toResult(error)
+
+/**
+ * Turns a [Result] value into an [Option].
+ *
+ * Returns a [Some] of the `value` if the result is a [success], else a [None]
+ */
+fun <A> Result<A>.getOrNone(): Option<A> = this.map { Some(it) }.getOrElse { None }
+
+/**
+ * Turns the Failure side of a [Result] into an [Option].
+ *
+ * Returns a [Some] of the `exception` if the result is a [failure], else a [None]
+ */
+fun <A> Result<A>.getFailureOrNone(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
 
 /**
  * If a [Result] is a failure, maps the underlying [Throwable] to a new [Throwable].
