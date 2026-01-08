@@ -3,7 +3,6 @@ package app.cash.quiver.extensions
 import app.cash.quiver.matchers.shouldBeAbsent
 import app.cash.quiver.matchers.shouldBeFailure
 import app.cash.quiver.matchers.shouldBePresent
-import arrow.core.Either
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.raise.result
@@ -147,12 +146,12 @@ class ResultTest : StringSpec({
     Result.success(None).toOutcomeOf().shouldBeAbsent()
   }
 
-  "asOption will return an option of the success" {
-    Result.success("zero").asOption() shouldBeSome "zero"
-    Result.failure<Any>(Throwable()).asOption() shouldBe None
+  "Converting to Option" {
+    Result.success("zero").toOption() shouldBeSome "zero"
+    Result.failure<Any>(Throwable()).toOption() shouldBe None
   }
 
-  "failureAsOption will return an option of the failure" {
+  "Converting failure to Option" {
     Result.success("zero").failureAsOption() shouldBe None
     val t = Throwable("boom")
     Result.failure<Any>(t).failureAsOption() shouldBeSome t

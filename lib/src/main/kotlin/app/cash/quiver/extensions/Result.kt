@@ -1,8 +1,5 @@
 package app.cash.quiver.extensions
 
-import app.cash.quiver.Failure
-import app.cash.quiver.Outcome
-import app.cash.quiver.Present
 import app.cash.quiver.asOutcome
 import app.cash.quiver.toOutcome
 import arrow.core.Either
@@ -10,10 +7,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.flatMap
-import arrow.core.getOrElse
 import arrow.core.identity
-import arrow.core.left
-import arrow.core.right
 
 /**
  * Transforms a `Result<T>` into an `ErrorOr<T>`
@@ -58,7 +52,7 @@ inline fun <A, B: Throwable> Option<A>.toResult(error: () -> B): Result<A> = thi
  *
  * Returns a [Some] of the `value` if the result is a [success], else a [None]
  */
-fun <A> Result<A>.asOption(): Option<A> = this.map { Some(it) }.getOrElse { None }
+fun <A> Result<A>.toOption(): Option<A> = this.map { Some(it) }.getOrElse { None }
 
 /**
  * Turns the Failure side of a [Result] into an [Option].

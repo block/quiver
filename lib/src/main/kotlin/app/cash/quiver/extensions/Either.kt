@@ -43,7 +43,7 @@ inline fun <E, A> Either<E, A>.or(f: () -> Either<E, A>): Either<E, A> = when (t
 /**
  * Turns your Either into an Option.
  */
-fun <E, A> Either<E, A>.asOption(): Option<A> = when (this) {
+fun <E, A> Either<E, A>.toOption(): Option<A> = when (this) {
   is Either.Left -> None
   is Either.Right -> Some(this.value)
 }
