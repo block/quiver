@@ -31,7 +31,7 @@ Releasing
 
     ```sh
     git commit -am "Prepare for release $RELEASE_VERSION."
-    git tag -a quiver-$RELEASE_VERSION -m "Version $RELEASE_VERSION"
+    git tag -a v$RELEASE_VERSION -m "Version $RELEASE_VERSION"
     git push && git push --tags
     gh pr create -f && gh pr merge --auto --squash
     ``` 
