@@ -65,8 +65,8 @@ class EitherTest : StringSpec({
   }
 
   "asOption will return an option of the right" {
-    Either.Right("zero").toOption() shouldBeSome "zero"
-    Either.Left("one").toOption() shouldBe None
+    Either.Right("zero").asOption() shouldBeSome "zero"
+    Either.Left("one").asOption() shouldBe None
   }
 
   "leftAsOption will return an option of the left" {
