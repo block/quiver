@@ -59,7 +59,7 @@ fun <A> Result<A>.toOption(): Option<A> = this.map { Some(it) }.getOrElse { None
  *
  * Returns a [Some] of the `exception` if the result is a [failure], else a [None]
  */
-fun <A> Result<A>.failureAsOption(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
+fun <A> Result<A>.failureToOption(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
 
 /**
  * If a [Result] is a failure, maps the underlying [Throwable] to a new [Throwable].
