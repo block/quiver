@@ -43,7 +43,7 @@ inline fun <ERR, A> A.validateEither(predicate: (A) -> Boolean, error: (A) -> ER
  * predicate evaluates as true or the error as a Failure.
  *
  * eg:
- * "hi mum".validate({it.contains("hi")},{"where's your manners?"})
+ * "hi mum".validate({it.contains("hi")},{ Exception("where's your manners?") })
  *
  */
 inline fun <A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A> =
