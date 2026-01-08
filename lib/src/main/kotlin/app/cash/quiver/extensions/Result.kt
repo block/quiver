@@ -52,14 +52,14 @@ inline fun <A, B: Throwable> Option<A>.toResult(error: () -> B): Result<A> = thi
  *
  * Returns a [Some] of the `value` if the result is a [success], else a [None]
  */
-fun <A> Result<A>.toOption(): Option<A> = this.map { Some(it) }.getOrElse { None }
+fun <A> Result<A>.getOrNone(): Option<A> = this.map { Some(it) }.getOrElse { None }
 
 /**
  * Turns the Failure side of a [Result] into an [Option].
  *
  * Returns a [Some] of the `exception` if the result is a [failure], else a [None]
  */
-fun <A> Result<A>.failureToOption(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
+fun <A> Result<A>.getFailureOrNone(): Option<Throwable> = this.map { None }.getOrElse { Some(it) }
 
 /**
  * If a [Result] is a failure, maps the underlying [Throwable] to a new [Throwable].

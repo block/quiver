@@ -147,13 +147,13 @@ class ResultTest : StringSpec({
   }
 
   "Converting success to Option" {
-    Result.success("zero").toOption() shouldBeSome "zero"
-    Result.failure<Any>(Throwable()).toOption() shouldBe None
+    Result.success("zero").getOrNone() shouldBeSome "zero"
+    Result.failure<Any>(Throwable()).getOrNone() shouldBe None
   }
 
   "Converting failure to Option" {
-    Result.success("zero").failureToOption() shouldBe None
+    Result.success("zero").getFailureOrNone() shouldBe None
     val t = Throwable("boom")
-    Result.failure<Any>(t).failureToOption() shouldBeSome t
+    Result.failure<Any>(t).getFailureOrNone() shouldBeSome t
   }
 })
