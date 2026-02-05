@@ -7,6 +7,7 @@ import app.cash.quiver.Present
 import app.cash.quiver.extensions.ValidatedNel
 import arrow.core.Either
 import arrow.core.NonEmptyList
+import io.kotest.matchers.shouldBe
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -68,3 +69,12 @@ fun <E, A> ValidatedNel<E, A>.shouldBeInvalid(): Set<E> {
     is Either.Right -> throw AssertionError("Expected Left (Invalid), but found $this")
   }
 }
+
+/** Assert that the Result is successful and return its value. */
+fun <T> Result<T>.shouldBeSuccessful(): T = this.getOrThrow()
+
+/** Assert that the Result is successful and run assertions on its value. */
+inline fun <T> Result<T>.shouldBeSuccessful(block: (T) -> Unit): T = this.getOrThrow().also(block)
+
+/** Assert that the Result is successful and equals the expected value. */
+infix fun <T> Result<T>.shouldBeSuccessful(expected: T): T = this.getOrThrow().also { it.shouldBe(expected) }
