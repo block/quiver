@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## [1.0.5]
+* Adds `<T> Result<T>.shouldBeSuccessful(): T` (Roni Greenwood)
+* Adds `fun <T> Result<T>.shouldBeSuccessful(block: (T) -> Unit): T` (Roni Greenwood)
+* Adds `<T> Result<T>.shouldBeSuccessful(expected: T): T` (Roni Greenwood)
+
 ## [1.0.3]
 * Adds `<A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A>` (Andrew Parker)
 * Adds `<A> Result<A>.getOrNone(): Option<A>` (Andrew Parker)
