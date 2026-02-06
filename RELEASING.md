@@ -27,17 +27,16 @@ Releasing
       gradle.properties
     ```
 
-5. Tag the release and push to GitHub. Submit and merge PR.
+5. Submit and merge PR.
 
     ```sh
     git commit -am "Prepare for release $RELEASE_VERSION."
-    git tag -a v$RELEASE_VERSION -m "Version $RELEASE_VERSION"
-    git push && git push --tags
+    git push
     gh pr create -f && gh pr merge --auto --squash
     ``` 
 
-6. Wait until the PR created above is merged, then trigger the
-   [Publish a release](https://github.com/cashapp/quiver/actions/workflows/Release.yml) action against the new tag.
+6. Wait until the PR created above is merged, then create a new release via the [GitHub UI](https://github.com/block/quiver/releases/new)
+   You will need to manually create the tag, ensuring that it starts with v (e.g. v1.0.0)
    This will publish to [Sonatype Nexus](https://oss.sonatype.org/), closing and releasing the artifact
    automatically to promote it to Maven Central. Note that it can take 10 to 30 minutes or more for the
    artifacts to appear on Maven Central.
