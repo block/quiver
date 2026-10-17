@@ -10,6 +10,7 @@ import arrow.core.some
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
@@ -20,14 +21,13 @@ import io.kotest.property.arbitrary.list
 import io.kotest.property.arbitrary.map
 import io.kotest.property.arbitrary.string
 import io.kotest.property.arrow.core.option
-import org.junit.jupiter.api.assertThrows
 import app.cash.quiver.extensions.traverse as quiverTraverse
 import app.cash.quiver.extensions.traverseOption as quiverTraverseOption
 import app.cash.quiver.extensions.sequence as quiverSequence
 
 class EitherTest : StringSpec({
   "orThrow returns expected result" {
-    assertThrows<NumberFormatException> {
+    shouldThrow<NumberFormatException> {
       testParse("hello").orThrow()
     }
   }

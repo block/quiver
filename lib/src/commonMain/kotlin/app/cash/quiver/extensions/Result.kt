@@ -8,6 +8,7 @@ import arrow.core.Option
 import arrow.core.Some
 import arrow.core.flatMap
 import arrow.core.identity
+import kotlin.jvm.JvmName
 
 /**
  * Transforms a `Result<T>` into an `ErrorOr<T>`

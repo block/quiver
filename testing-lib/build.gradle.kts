@@ -1,6 +1,5 @@
 plugins {
-  id("java-library")
-  id("org.jetbrains.kotlin.jvm")
+  alias(libs.plugins.kotlinMultiplatform)
   id("com.vanniktech.maven.publish")
 }
 
@@ -8,34 +7,18 @@ repositories {
   mavenCentral()
 }
 
-sourceSets {
-  val test by getting {
-    java.srcDir("src/test/kotlin/")
-  }
-}
-
-java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(11))
-  }
-  withSourcesJar()
-}
-
 mavenPublishing {
-  configure(com.vanniktech.maven.publish.KotlinJvm())
+  configure(com.vanniktech.maven.publish.KotlinMultiplatform())
 }
 
-dependencies {
-  implementation(project(":lib"))
-  implementation(libs.arrowCore)
-  implementation(libs.kotestProperty)
-  implementation(libs.kotestPropertyArrow)
-
-  testImplementation(libs.junitApi)
-  testImplementation(libs.kotestAssertions)
-  testImplementation(libs.kotestAssertionsArrow)
-  testImplementation(libs.kotestFrameworkApi)
-  testImplementation(libs.kotestJunitRunnerJvm)
-
-  testRuntimeOnly(libs.junitEngine)
+kotlin {
+  sourceSets {
+    commonMain.dependencies {
+      implementation(project(":lib"))
+      implementation(libs.arrowCore)
+      implementation(libs.kotestAssertions)
+      implementation(libs.kotestProperty)
+      implementation(libs.kotestPropertyArrow)
+    }
+  }
 }

@@ -15,7 +15,8 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # Apple targets can only be built on macOS, so the full set of multiplatform artifacts must be published from there.
+    runs-on: macos-latest
 
     steps:
       - name: Checkout the repo

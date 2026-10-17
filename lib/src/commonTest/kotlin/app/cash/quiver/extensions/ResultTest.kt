@@ -18,6 +18,7 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.map
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import kotlin.coroutines.cancellation.CancellationException
 
 class ResultTest : StringSpec({
 
@@ -71,9 +72,9 @@ class ResultTest : StringSpec({
       throw RuntimeException("Non-fatal kaboom!")
     }.shouldBeFailure()
 
-    shouldThrow<OutOfMemoryError> {
+    shouldThrow<CancellationException> {
       Result.catch {
-        throw OutOfMemoryError("Fatal kaboom!")
+        throw CancellationException("Fatal kaboom!")
       }
     }
   }

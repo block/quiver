@@ -3,8 +3,8 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URL
 
 plugins {
-  id("java-library")
-  id("org.jetbrains.kotlin.jvm")
+  alias(libs.plugins.kotlinMultiplatform)
+  alias(libs.plugins.kotestMultiplatform)
   alias(libs.plugins.dokka)
   id("com.vanniktech.maven.publish")
 }
@@ -19,34 +19,30 @@ buildscript {
   }
 }
 
-java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(11))
-  }
-  withSourcesJar()
-}
-
 mavenPublishing {
-  configure(com.vanniktech.maven.publish.KotlinJvm())
+  configure(com.vanniktech.maven.publish.KotlinMultiplatform())
 }
 
-dependencies {
-  implementation(kotlin("reflect"))
-  implementation(libs.arrowCore)
-  implementation(libs.arrowResilience)
+kotlin {
+  sourceSets {
+    commonMain.dependencies {
+      implementation(libs.arrowCore)
+      implementation(libs.arrowResilience)
+    }
 
-  testImplementation(project(":testing-lib"))
-  testImplementation(libs.junitApi)
-  testImplementation(libs.kotestAssertions)
-  testImplementation(libs.kotestAssertionsArrow)
-  testImplementation(libs.kotestFrameworkApi)
-  testImplementation(libs.kotestJunitRunnerJvm)
-  testImplementation(libs.kotestProperty)
-  testImplementation(libs.kotestPropertyArrow)
+    commonTest.dependencies {
+      implementation(project(":testing-lib"))
+      implementation(libs.kotestAssertions)
+      implementation(libs.kotestAssertionsArrow)
+      implementation(libs.kotestFrameworkEngine)
+      implementation(libs.kotestProperty)
+      implementation(libs.kotestPropertyArrow)
+    }
 
-  testRuntimeOnly(libs.junitEngine)
-
-  apply(plugin = libs.plugins.dokka.get().pluginId)
+    jvmTest.dependencies {
+      implementation(libs.kotestJunitRunnerJvm)
+    }
+  }
 }
 
 // Copies Quiver logo into Dokka output directory, making images accessible in documentation
@@ -62,7 +58,7 @@ tasks.withType<DokkaTask>().configureEach {
   }
 
   dokkaSourceSets {
-    named("main") {
+    named("commonMain") {
       moduleName.set("Quiver Library")
 
       // Includes custom documentation
@@ -70,8 +66,8 @@ tasks.withType<DokkaTask>().configureEach {
 
       // Points source links to GitHub
       sourceLink {
-        localDirectory.set(file("src/main/kotlin"))
-        remoteUrl.set(URL("https://github.com/cashapp/quiver/tree/master/lib/src/main/kotlin"))
+        localDirectory.set(file("src/commonMain/kotlin"))
+        remoteUrl.set(URL("https://github.com/cashapp/quiver/tree/master/lib/src/commonMain/kotlin"))
         remoteLineSuffix.set("#L")
       }
     }

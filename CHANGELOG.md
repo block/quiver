@@ -1,6 +1,11 @@
 # Change Log
 
 ## Unreleased
+* Adds Kotlin Multiplatform support: `lib` and `lib-test` are now published for JVM, JS, iOS, macOS, tvOS, watchOS,
+  Linux x64 and mingw x64 in addition to the existing JVM artifacts (Jem Mawson)
+* `withRetries` and `withRetriesOrThrow` now take a `kotlin.time.Duration` `delay`. The `java.time.Duration`
+  overloads remain on the JVM for binary compatibility but are hidden from Kotlin source; migrate with
+  `toKotlinDuration()` (Jem Mawson)
 
 ## [1.0.5]
 * Adds `<T> Result<T>.shouldBeSuccessful(): T` (Roni Greenwood)

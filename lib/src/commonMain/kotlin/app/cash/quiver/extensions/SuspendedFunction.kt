@@ -1,9 +1,14 @@
+@file:JvmMultifileClass
+@file:JvmName("SuspendedFunctionKt")
+
 package app.cash.quiver.extensions
 
 import arrow.core.Either
 import arrow.resilience.Schedule
-import java.time.Duration
-import kotlin.time.toKotlinDuration
+import kotlin.jvm.JvmMultifileClass
+import kotlin.jvm.JvmName
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Map on this suspended supplier with a suspended function.
@@ -31,7 +36,7 @@ fun <A, B, C> (suspend (A) -> B).map(f: (B) -> C): suspend (A) -> C = { a: A ->
 suspend fun <T> (suspend () -> T).withRetriesOrThrow(
   until: (ErrorOr<T>) -> Boolean = { it.isRight() },
   additionalTimes: Int = 4,
-  delay: Duration = Duration.ofMillis(20L),
+  delay: Duration = 20.milliseconds,
   exponentialBackoff: Boolean = false,
   jitter: Boolean = false,
 ): ErrorOr<T> = withRetries(until, additionalTimes, delay, exponentialBackoff, jitter) {
@@ -50,7 +55,7 @@ suspend fun <T> (suspend () -> T).withRetriesOrThrow(
 suspend fun <T> (suspend () -> ErrorOr<T>).withRetries(
   until: (ErrorOr<T>) -> Boolean = { it.isRight() },
   additionalTimes: Int = 4,
-  delay: Duration = Duration.ofMillis(20L),
+  delay: Duration = 20.milliseconds,
   exponentialBackoff: Boolean = false,
   jitter: Boolean = false,
 ): ErrorOr<T> = withRetries(until, additionalTimes, delay, exponentialBackoff, jitter) {
@@ -66,8 +71,8 @@ private suspend fun <T> withRetries(
   f: suspend () -> ErrorOr<T>,
 ): ErrorOr<T> {
   val baseSchedule =
-    if (exponentialBackoff) Schedule.exponential(delay.toKotlinDuration())
-    else Schedule.spaced<ErrorOr<T>>(delay.toKotlinDuration())
+    if (exponentialBackoff) Schedule.exponential(delay)
+    else Schedule.spaced<ErrorOr<T>>(delay)
   val schedule = baseSchedule
     .doUntil { input, _ -> until(input) }
     .and(Schedule.recurs(additionalTimes.toLong()))
