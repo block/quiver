@@ -4,7 +4,8 @@ import java.net.URL
 
 plugins {
   alias(libs.plugins.kotlinMultiplatform)
-  alias(libs.plugins.kotestMultiplatform)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.kotest)
   alias(libs.plugins.dokka)
   id("com.vanniktech.maven.publish")
 }
