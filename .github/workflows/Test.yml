@@ -11,7 +11,9 @@ env:
   TERM: dumb
 
 jobs:
-  build:
+  # Keep this job id as `jvm`: the branch protection on `main` requires the
+  # `jvm (ubuntu-latest, ...)` check by name, even though the job now builds every target.
+  jvm:
     runs-on: ${{ matrix.os }}
 
     strategy:
