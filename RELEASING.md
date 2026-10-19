@@ -19,7 +19,7 @@ Releasing
 3. Update `CHANGELOG.md` with changes since the last release. Follow the existing `CHANGELOG.md` format, which is
    derived from [this guide](https://keepachangelog.com/en/1.0.0/)
 
-4. Update documentation and Gradle properties with `RELEASE_VERSION`
+4. Update Gradle properties with `RELEASE_VERSION`
 
     ```sh
     sed -i "" \
@@ -36,9 +36,10 @@ Releasing
     ``` 
 
 6. Wait until the PR created above is merged, then create a new release via the [GitHub UI](https://github.com/block/quiver/releases/new)
-   You will need to manually create the tag, ensuring that it starts with v (e.g. v1.0.0)
-   This will publish to [Sonatype Nexus](https://oss.sonatype.org/), closing and releasing the artifact
-   automatically to promote it to Maven Central. Note that it can take 10 to 30 minutes or more for the
+   You will need to manually create the tag, ensuring that it starts with v (e.g. v1.0.0).
+   Copy the release notes added to `CHANGELOG.md` in step 3 into the release description.
+   This triggers the `Publish a release` workflow, which publishes the artifacts to Maven Central through the
+   [Sonatype Central Portal](https://central.sonatype.com/). Note that it can take 10 to 30 minutes or more for the
    artifacts to appear on Maven Central.
 
 
@@ -60,9 +61,6 @@ Releasing
     git push
     gh pr create -f && gh pr merge --auto --squash
     ```
-
-9. [Draft a new release](https://github.com/cashapp/quiver/releases/new) of `A.B.C` and publish it. Copy release
-   notes added to `CHANGELOG.md` in step 1 into the release description.
 
 ## Troubleshooting
 

@@ -19,7 +19,7 @@
 ## [1.0.3]
 * Adds `<A> A.validateResult(predicate: (A) -> Boolean, error: (A) -> Throwable): Result<A>` (Andrew Parker)
 * Adds `<A> Result<A>.getOrNone(): Option<A>` (Andrew Parker)
-* Adds `<A> Result<A>.getFailureOrNone(): Option<T>` (Andrew Parker)
+* Adds `<A> Result<A>.getFailureOrNone(): Option<Throwable>` (Andrew Parker)
 
 ## [1.0.2]
 * Moves demand extension function to extensions package (Hugo Müller-Downing)
