@@ -68,7 +68,7 @@ tasks.withType<DokkaTask>().configureEach {
       // Points source links to GitHub
       sourceLink {
         localDirectory.set(file("src/commonMain/kotlin"))
-        remoteUrl.set(URL("https://github.com/cashapp/quiver/tree/master/lib/src/commonMain/kotlin"))
+        remoteUrl.set(URL("https://github.com/block/quiver/tree/main/lib/src/commonMain/kotlin"))
         remoteLineSuffix.set("#L")
       }
     }
