@@ -1,9 +1,6 @@
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.graph.conflicts.DefaultCapabilitiesConflictHandler.candidate
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.TestExecutable
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 
 plugins {
   alias(libs.plugins.kotlinMultiplatform) apply false
@@ -51,16 +48,7 @@ subprojects {
       watchosSimulatorArm64()
       linuxX64()
       mingwX64()
-
-      // Kotest 5.9's compiler plugin cannot generate Kotlin/Native test launchers with Kotlin 2.1, so native test
-      // binaries are neither built nor run. The same tests run on the JVM and JS. Remove this once the build moves to
-      // Kotest 6, whose KSP based discovery supports native targets.
-      targets.withType<KotlinNativeTarget>().configureEach {
-        compilations.named("test") { compileTaskProvider.configure { enabled = false } }
-        binaries.withType<TestExecutable>().configureEach { linkTaskProvider.configure { enabled = false } }
-      }
     }
-    tasks.withType<KotlinNativeTest>().configureEach { enabled = false }
   }
 
   tasks.withType<Test> {
