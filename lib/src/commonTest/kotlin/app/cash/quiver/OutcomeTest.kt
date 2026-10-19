@@ -21,7 +21,6 @@ import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
@@ -34,7 +33,6 @@ import io.kotest.property.arrow.core.either
 import io.kotest.property.arrow.core.option
 import io.kotest.property.checkAll
 import kotlinx.coroutines.coroutineScope
-import java.lang.IllegalStateException
 
 class OutcomeTest : StringSpec({
   "Present flatMap" {
@@ -84,14 +82,12 @@ class OutcomeTest : StringSpec({
   }
 
   "bind over suspended function" {
-    runBlocking {
-      val outcome1: Outcome<String, Int> = Present(1)
-      outcome {
-        val a = outcome1.bind()
-        val b = Present(2).bind()
-        a + b
-      }.shouldBePresent().shouldBe(3)
-    }
+    val outcome1: Outcome<String, Int> = Present(1)
+    outcome {
+      val a = outcome1.bind()
+      val b = Present(2).bind()
+      a + b
+    }.shouldBePresent().shouldBe(3)
   }
 
   "Monad laws: right identity" {

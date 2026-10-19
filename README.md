@@ -22,6 +22,10 @@ There are two published builds.
 On the [Sontaype page for Quiver](https://central.sonatype.com/namespace/app.cash.quiver), choose the latest version 
 of `lib` (and `lib-test` if desired) and follow the instructions for inclusion in your build tool. 
 
+Quiver is a Kotlin Multiplatform library. Gradle resolves the right artifact for each target from `app.cash.quiver:lib`;
+JVM, JS, iOS, macOS, tvOS, watchOS, Linux (x64) and Windows (mingw x64) are supported. Other build tools should
+depend on the platform artifact directly, for example `app.cash.quiver:lib-jvm`.
+
 ## Building
 
 Install Hermit, see instructions at https://cashapp.github.io/hermit/

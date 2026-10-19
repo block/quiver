@@ -11,12 +11,15 @@ env:
   TERM: dumb
 
 jobs:
+  # Keep this job id as `jvm`: the branch protection on `main` requires the
+  # `jvm (ubuntu-latest, ...)` check by name, even though the job now builds every target.
   jvm:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        # Linux builds and tests the JVM, JS, and Linux targets. macOS additionally builds and tests the Apple targets.
+        os: [ubuntu-latest, macos-latest]
         cmd:
           - bin/gradle clean build -i --scan --no-daemon
 
@@ -31,6 +34,6 @@ jobs:
         if: ${{ always() }}
         uses: mikepenz/action-junit-report@v2
         with:
-          check_name: Test Report - ${{ matrix.cmd }}
-          report_paths: '**/build/test-results/test/TEST-*.xml'
+          check_name: Test Report - ${{ matrix.os }}
+          report_paths: '**/build/test-results/*/TEST-*.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
