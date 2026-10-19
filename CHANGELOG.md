@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+
+## [2.0.0]
 * Upgrades `lib-test` to Kotest 6.2.6 and enables native tests. Quiver now requires Kotlin 2.2 or newer, and `lib-test`
   consumers must use Kotest 6.2.6 or newer on both their test compile and runtime classpaths (Jem Mawson)
 * Adds Kotlin Multiplatform support: `lib` and `lib-test` are now published for JVM, JS, iOS, macOS, tvOS, watchOS,
